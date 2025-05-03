@@ -1,26 +1,153 @@
-
 <!DOCTYPE html>
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>صارحني بسرية</title>
+    <title>موقع صارحني</title>
     <style>
         body {
-            text-align: center;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, #e0f0ff, #ffffff);
-            padding: 20px;
+            background: url('https://www.example.com/your-image.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #333;
+            overflow: hidden;
         }
-        img {
-            max-width: 300px;
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+        .message-box, .register-box {
+            margin: 20px 0;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 5px;
+        }
+        .message-input, .register-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .message-list {
+            list-style: none;
+            padding: 0;
+        }
+        .message-item {
+            background-color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .footer {
+            text-align: center;
             margin-top: 20px;
+            font-size: 14px;
+        }
+        .footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <h1>أهلاً بك في موقع صارحني بسرية</h1>
-    <p>مرحباً بك في موقع صارحني بسرية حيث يمكنك إرسال رسائل سرية لصديقك. قم بتسجيل الدخول وابدأ في التفاعل الآن!</p>
-    <img src="logo.png" alt="شعار صارحني">
+
+<div class="container">
+    <h1>أهلاً بك في موقع صارحني</h1>
+    <p>مرحباً بك في موقع صارحني حيث يمكنك إرسال رسائل سرية لصديقك. قم بتسجيل الدخول وابدأ في التفاعل الآن!</p>
+
+    <!-- عرض عدد المستخدمين المتزايد بشكل وهمي -->
+    <h3>عدد المستخدمين الحاليين: <span id="user-count">1234</span></h3>
+
+    <!-- نموذج تسجيل الدخول -->
+    <div class="register-box">
+        <h2>تسجيل الدخول:</h2>
+        <form action="login.php" method="post">
+            <input type="email" name="email" class="register-input" placeholder="البريد الإلكتروني" required>
+            <input type="password" name="password" class="register-input" placeholder="كلمة المرور" required>
+            <button type="submit">تسجيل الدخول</button>
+        </form>
+    </div>
+
+    <!-- عرض الرسائل الخاصة بالمستخدم المسجل فقط -->
+    <h2>الرسائل المرسلة:</h2>
+    <ul class="message-list" id="user-messages">
+        <!-- سيتم عرض الرسائل هنا بناءً على المستخدم -->
+    </ul>
+
+    <!-- نموذج إرسال رسالة جديدة -->
+    <div class="message-box">
+        <h2>أرسل رسالة جديدة:</h2>
+        <form id="message-form">
+            <textarea class="message-input" id="new-message" rows="4" placeholder="اكتب رسالتك هنا..."></textarea>
+            <button type="submit">إرسال</button>
+        </form>
+    </div>
+
+    <p>عدد الرسائل المرسلة: <span id="message-count">0</span></p>
+</div>
+
+<div class="footer">
+    <p>Mohamed Kamal | للتواصل مع المطور: <a href="https://t.me/t_n_1g" target="_blank">@t_n_1g</a></p>
+</div>
+
+<script>
+    // تخزين الرسائل الخاصة بكل مستخدم (افتراضياً في هذه الحالة)
+    let userMessages = {
+        "user1@example.com": [
+            "مرحباً، كيف حالك؟",
+            "أهلاً، أحببت الموقع!"
+        ],
+        "user2@example.com": [
+            "مرحباً، أريد التحدث معك!"
+        ]
+    };
+
+    // محاكاة تسجيل الدخول: بعد إدخال البريد الإلكتروني، سيظهر رسائل المستخدم
+    const currentUserEmail = "user1@example.com"; // هنا ستأتي من صفحة تسجيل الدخول
+    let currentUserMessages = userMessages[currentUserEmail] || [];
+
+    // عرض رسائل المستخدم
+    function displayMessages(messages) {
+        const messageList = document.getElementById("user-messages");
+        messageList.innerHTML = ""; // مسح الرسائل السابقة
+        messages.forEach((message) => {
+            const messageItem = document.createElement("li");
+            messageItem.classList.add("message-item");
+            messageItem.textContent = message;
+            messageList.appendChild(messageItem);
+        });
+        document.getElementById("message-count").textContent = messages.length;
+    }
+
+    // عند إرسال رسالة جديدة
+    document.getElementById("message-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const newMessage = document.getElementById("new-message").value;
+        if (newMessage) {
+            currentUserMessages.push(newMessage); // إضافة الرسالة إلى الرسائل الخاصة بالمستخدم
+            displayMessages(currentUserMessages); // تحديث عرض الرسائل
+            document.getElementById("new-message").value = ""; // مسح الحقل بعد الإرسال
+        }
+    });
+
+    // عرض الرسائل عند تحميل الصفحة
+    displayMessages(currentUserMessages);
+
+    // محاكاة تسجيل المستخدم الحالي
+    console.log("المستخدم الحالي: " + currentUserEmail);
+</script>
+
 </body>
 </html>
